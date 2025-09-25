@@ -1,0 +1,50 @@
+{
+  "extensionName": {
+    "message": "Identity Chooser"
+  },
+  "extensionDescription": {
+    "message": "Identity Chooser pomaga wybrać właściwą tożsamość podczas tworzenia nowej wiadomości email, odpowiadania lub przekazywania dalej."
+  },
+  "options_optionsPageTitle": {
+    "message": "Identity Chooser -- Ustawienia"
+  },
+  "options_generalOptionsTitle": {
+    "message": "Ogólne"
+  },
+  "options_icEnableComposeMessage.label": {
+    "message": "Pokaż listę tożsamości podczas pisania nowej wiadomości"
+  },
+  "options_icEnableReplayMessage.label": {
+    "message": "Pokaż listę tożsamości podczas odpowiadania na wiadomość"
+  },
+  "options_icEnableForwardMessage.label": {
+    "message": "Pokaż listę tożsamości podczas przekazywania wiadomości dalej"
+  },
+  "options_icEnableDraftMessage.label": {
+    "message": "Pokaż listę tożsamości podczas otwierania wersji roboczej"
+  },
+  "options_restart.hint": {
+    "message": "Podpowiedź: po zmianie którejkolwiek z tych opcji może być konieczne ponowne uruchomienie programu Thunderbird"
+  },
+  "options_sortOptionsTitle": {
+    "message": "Sortowanie"
+  },
+  "options_sortOrder.hint": {
+    "message": "Przestaw kolejność tożsamości przeciągając je tutaj. Możesz ukryć tożsamość w menu Identity Chooser, odznaczając adres e-mail w tym miejscu:"
+  },
+  "options_icWarnColorsTitle": {
+    "message": "Kolory ostrzeżeń"
+  },
+  "options_icWarnColorsHint": {
+    "message": "<p>Jeśli chcesz wyświetlać kolorową ramkę wokół okna „+ Nowa wiadomość”, aby odróżniać tożsamości, polecam dodatek <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1]. Identity Chooser wykrywa zainstalowaną kopię Border Colors D i integruje się z nią inteligentnie.</p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+  },
+  "identitiesPopup_identitiesPopupTitle": {
+    "message": "Identity Chooser"
+  },
+  "identitiesPopup_instructions": {
+    "message": "Wybierz tożsamość, aby kontynuować:"
+  },
+  "identitiesPopup_cancelButton": {
+    "message": "Anuluj"
+  }
+}
