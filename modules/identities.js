@@ -6,6 +6,12 @@ export class IcIdentities {
   async getIdentities() {
     console.debug("IcIdentities#getIdentities -- begin");
 
+    var cachedIdentities = await this.optionsBackend.getCachedIdentities();
+    if (cachedIdentities != null) {
+      console.debug("IcIdentities#getIdentities -- using cached identities", cachedIdentities);
+      return cachedIdentities;
+    }
+
     var icIdentities = [];
 
     var identitiesProps = await this.optionsBackend.getIdentitiesExtendedProps();
@@ -55,6 +61,10 @@ export class IcIdentities {
     icIdentities = icIdentities.filter(function (el) {
       return el != null;
     });
+
+    if (icIdentities.length > 0) {
+      await this.optionsBackend.storeCachedIdentities(icIdentities);
+    }
 
     console.debug("IcIdentities#getIdentities -- end", icIdentities);
 

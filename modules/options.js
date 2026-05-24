@@ -1,5 +1,8 @@
 export class Options {
   constructor() {
+    this.cachedIdentitiesKey = 'identityChooserCachedIdentities';
+    this.cachedBorderColorsKey = 'identityChooserCachedBorderColors';
+
     this.defaultOptionKeys = [
       'icEnableComposeMessage',
       'icEnableReplyMessage',
@@ -105,5 +108,37 @@ export class Options {
 
   async storeIdentitiesExtendedProps(props) {
     return browser.storage.local.set({ identitiesExtendedProps: props });
+  }
+
+  async getCachedIdentities() {
+    var cached = await browser.storage.local.get(this.cachedIdentitiesKey);
+
+    if (this.cachedIdentitiesKey in cached) {
+      return cached[this.cachedIdentitiesKey];
+    }
+
+    return null;
+  }
+
+  async storeCachedIdentities(identities) {
+    return browser.storage.local.set({ [this.cachedIdentitiesKey]: identities });
+  }
+
+  async clearCachedIdentities() {
+    return browser.storage.local.remove(this.cachedIdentitiesKey);
+  }
+
+  async getCachedBorderColors() {
+    var cached = await browser.storage.local.get(this.cachedBorderColorsKey);
+
+    if (this.cachedBorderColorsKey in cached) {
+      return cached[this.cachedBorderColorsKey];
+    }
+
+    return null;
+  }
+
+  async storeCachedBorderColors(borderColors) {
+    return browser.storage.local.set({ [this.cachedBorderColorsKey]: borderColors });
   }
 }

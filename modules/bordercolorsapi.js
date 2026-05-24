@@ -6,6 +6,11 @@ export class BorderColorsApi {
   }
 
   async getAllColors() {
+    let cachedColors = await browser.storage.local.get('identityChooserCachedBorderColors');
+    if ('identityChooserCachedBorderColors' in cachedColors) {
+      return cachedColors['identityChooserCachedBorderColors'];
+    }
+
     let borderColors = null;
     const maxAttempts = 10;
     const retryDelayMs = 100;
@@ -24,6 +29,10 @@ export class BorderColorsApi {
       }
 
       await new Promise(resolve => setTimeout(resolve, retryDelayMs));
+    }
+
+    if (borderColors != null) {
+      await browser.storage.local.set({ identityChooserCachedBorderColors: borderColors });
     }
 
     return borderColors;

@@ -61,7 +61,7 @@ class OptionsUI {
     }
 
     let borderColorsApi = new BorderColorsApi();
-    let borderColors = await borderColorsApi.getAllColors();
+    let borderColorsPromise = borderColorsApi.getAllColors();
 
     console.debug("OptionsUI#updateUI: populate identity sort list");
     var icIdentities = new IcIdentities(this.optionsBackend);
@@ -86,16 +86,9 @@ class OptionsUI {
       // Create identity label and add it to the row
       var identityLabelDiv = document.createElement("div");
 
-      if(borderColors != null) {
-        let dotEl = document.createElement("span");
-        dotEl.classList.add("border-color");
-        identityLabelDiv.appendChild(dotEl);
-
-        if(identity.id in borderColors &&
-           borderColors[identity.id] !== undefined) {
-          identityLabelDiv.style.setProperty("--bullet-color", borderColors[identity.id]);
-        }
-      }
+      let dotEl = document.createElement("span");
+      dotEl.classList.add("border-color");
+      identityLabelDiv.appendChild(dotEl);
 
 
       identityLabelDiv.classList.add("identity-label");
@@ -109,6 +102,14 @@ class OptionsUI {
       console.debug("OptionsUI#updateUI: added identity ", identity.label);
     }
 
+    borderColorsPromise.then(borderColors => {
+      if (borderColors != null) {
+        this.applyBorderColors(domIcIdentitySortList, identities, borderColors);
+      }
+    }).catch(() => {
+      // Ignore color lookup failures; the options page should still render.
+    });
+
     new Sortable(domIcIdentitySortList, {
       animation: 150,
       ghostClass: 'blue-background-class',
@@ -116,6 +117,30 @@ class OptionsUI {
     });
 
     console.debug("OptionsUI#updateUI -- end");
+  }
+
+  applyBorderColors(domIcIdentitySortList, identities, borderColors) {
+    for (const identity of identities) {
+      if (!identity.showInMenu) {
+        continue;
+      }
+
+      let identityLabelDiv = domIcIdentitySortList.querySelector(`[identityId="${identity.id}"]`);
+      if (!identityLabelDiv) {
+        continue;
+      }
+
+      let color = null;
+      if (identity.accountId && identity.accountId in borderColors) {
+        color = borderColors[identity.accountId];
+      } else if (identity.id in borderColors) {
+        color = borderColors[identity.id];
+      }
+
+      if (color !== null && color !== undefined && color !== "") {
+        identityLabelDiv.style.setProperty("--bullet-color", color);
+      }
+    }
   }
 
   async setupListeners() {
@@ -162,6 +187,7 @@ class OptionsUI {
     console.debug("OptionsUI#identitiesChanged -- new sort order: ",
       extendedProperties);
     await this.optionsBackend.storeIdentitiesExtendedProps(extendedProperties);
+    await this.optionsBackend.clearCachedIdentities();
 
     console.debug("OptionsUI#identitiesChanged -- end");
   }

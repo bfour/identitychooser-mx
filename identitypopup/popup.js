@@ -17,27 +17,19 @@ class IdentitiesPopup {
     let identitiesList = document.getElementById("icIdentityList");
 
     let borderColorsApi = new BorderColorsApi();
-    let borderColors = await borderColorsApi.getAllColors();
+    let borderColorsPromise = borderColorsApi.getAllColors();
 
-    for(const identity of identities) {
-      if(identity.showInMenu) {
+    for (const identity of identities) {
+      if (identity.showInMenu) {
         let li = document.createElement("li");
         let button = document.createElement("button");
         button.setAttribute("type", "button");
         button.setAttribute("data", identity.id);
         button.addEventListener("click", this.identityButtonClicked);
 
-        if(borderColors != null) {
-          // button.classList.add("with-border-color");
-          let dotEl = document.createElement("span");
-          dotEl.classList.add("border-color");
-          button.appendChild(dotEl);
-
-          if(identity.id in borderColors &&
-             borderColors[identity.id] !== undefined) {
-            button.style.setProperty("--bullet-color", borderColors[identity.id]);
-          }
-        }
+        let dotEl = document.createElement("span");
+        dotEl.classList.add("border-color");
+        button.appendChild(dotEl);
 
         let textEl = document.createElement("span");
         textEl.textContent = identity.label;
@@ -48,9 +40,41 @@ class IdentitiesPopup {
       }
     }
 
+    borderColorsPromise.then(borderColors => {
+      if (borderColors != null) {
+        this.applyBorderColors(identitiesList, identities, borderColors);
+      }
+    }).catch(() => {
+      // Ignore color lookup failures; the chooser still works without them.
+    });
+
     let cancelBtn = document.getElementById("cancel");
     cancelBtn.setAttribute("data", "cancel");
     cancelBtn.addEventListener("click", this.identityButtonClicked);
+  }
+
+  applyBorderColors(identitiesList, identities, borderColors) {
+    for (const identity of identities) {
+      if (!identity.showInMenu) {
+        continue;
+      }
+
+      let button = identitiesList.querySelector(`button[data="${identity.id}"]`);
+      if (!button) {
+        continue;
+      }
+
+      let color = null;
+      if (identity.accountId && identity.accountId in borderColors) {
+        color = borderColors[identity.accountId];
+      } else if (identity.id in borderColors) {
+        color = borderColors[identity.id];
+      }
+
+      if (color !== null && color !== undefined && color !== "") {
+        button.style.setProperty("--bullet-color", color);
+      }
+    }
   }
 
   async identityButtonClicked(event) {

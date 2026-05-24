@@ -1,5 +1,6 @@
 import { Options } from './modules/options.js';
 import { IcIdentities } from '../modules/identities.js';
+import { BorderColorsApi } from './modules/bordercolorsapi.js';
 
 class IdentityChooser {
   constructor() {
@@ -30,6 +31,20 @@ class IdentityChooser {
     }
 
     browser.tabs.onCreated.addListener(async (tab) => this.tabCreated(tab));
+
+    this.warmCaches();
+  }
+
+  async warmCaches() {
+    try {
+      let icIdentities = new IcIdentities(this.icOptions);
+      await icIdentities.getIdentities();
+
+      let borderColorsApi = new BorderColorsApi();
+      await borderColorsApi.getAllColors();
+    } catch (error) {
+      console.debug("Failed to warm chooser caches.", error);
+    }
   }
 
   async tabCreated(tab) {
