@@ -7,15 +7,23 @@ export class BorderColorsApi {
 
   async getAllColors() {
     let borderColors = null;
-    try {
-      let resp = await browser.runtime.sendMessage(EXTENSION_ID,
-                                                   {command: "colors.all"});
-      if(resp) {
-        borderColors = resp;
+    const maxAttempts = 10;
+    const retryDelayMs = 100;
+
+    for(let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        let resp = await browser.runtime.sendMessage(EXTENSION_ID,
+                                                     {command: "colors.all"});
+        if(resp) {
+          borderColors = resp;
+          break;
+        }
+      } catch(error) {
+        // Border Colors D not installed or not ready yet. Retry a few times
+        // to cover startup timing on Betterbird.
       }
-    } catch(error) {
-      // Border Colores not installed or otherwise available; eat the
-      // exception
+
+      await new Promise(resolve => setTimeout(resolve, retryDelayMs));
     }
 
     return borderColors;

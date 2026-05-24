@@ -65,7 +65,7 @@ button {
 }
 
 .border-color{
-    background: var(--bullet-color, --button-color);
+  background: var(--bullet-color, var(--button-color));
     border-radius: 50%;
     display: inline-block;
     height: 1rem;
