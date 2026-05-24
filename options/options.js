@@ -23,7 +23,7 @@ class OptionsUI {
     for (let el of document.querySelectorAll("[data-l10n-id]")) {
       let id = el.getAttribute("data-l10n-id");
       let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
+      if (i18nMessage == "") {
         i18nMessage = id;
       }
       el.textContent = i18nMessage;
@@ -32,7 +32,7 @@ class OptionsUI {
     for (let el of document.querySelectorAll("[data-html-l10n-id]")) {
       let id = el.getAttribute("data-html-l10n-id");
       let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
+      if (i18nMessage == "") {
         i18nMessage = id;
       }
       el.insertAdjacentHTML('afterbegin', i18nMessage);
@@ -49,12 +49,12 @@ class OptionsUI {
     console.debug("OptionsUI#updateUI: sync options to UI");
     for (const [optionName, optionValue] of Object.entries(options)) {
       console.debug("OptionsUI#updateUI: option: ", optionName,
-                    "value: ", optionValue);
+        "value: ", optionValue);
 
       if (optionName in this.optionsBackend.defaultOptions) {
         var optionElement = document.getElementById(optionName);
 
-        if(optionElement.classList.contains("icGeneralOption")) {
+        if (optionElement.classList.contains("icGeneralOption")) {
           optionElement.checked = optionValue;
         }
       }
@@ -67,9 +67,9 @@ class OptionsUI {
     var icIdentities = new IcIdentities(this.optionsBackend);
     var identities = await icIdentities.getIdentities();
     var domIcIdentitySortList =
-        document.getElementById("icIdentitySortList");
+      document.getElementById("icIdentitySortList");
 
-    for(const identity of identities) {
+    for (const identity of identities) {
       console.debug("OptionsUI#updateUI: add identity ", identity.label);
 
       // Create drag'n'drop row for an identity
@@ -123,12 +123,12 @@ class OptionsUI {
   }
 
   async optionChanged(e) {
-    if(e == null) {
+    if (e == null) {
       return;
     }
 
-    if(e.target.tagName == "INPUT" &&
-       e.target.type == "checkbox") {
+    if (e.target.tagName == "INPUT" &&
+      e.target.type == "checkbox") {
       var optionName = e.target.id;
       var optionValue = e.target.checked;
 
@@ -142,12 +142,12 @@ class OptionsUI {
     console.debug("OptionsUI#identitiesChanged -- begin");
 
     var domIcIdentitySortList =
-        document.getElementById("icIdentitySortList");
+      document.getElementById("icIdentitySortList");
 
     var positionInMenu = 0;
     var extendedProperties = {};
-    for(const domIdentity of domIcIdentitySortList.children) {
-      var showInMenuInput =  domIdentity.children.item(0);
+    for (const domIdentity of domIcIdentitySortList.children) {
+      var showInMenuInput = domIdentity.children.item(0);
       var showInMenu = showInMenuInput.checked;
 
       var identityLabelDiv = domIdentity.children.item(1);
@@ -160,7 +160,7 @@ class OptionsUI {
     }
 
     console.debug("OptionsUI#identitiesChanged -- new sort order: ",
-                 extendedProperties);
+      extendedProperties);
     await this.optionsBackend.storeIdentitiesExtendedProps(extendedProperties);
 
     console.debug("OptionsUI#identitiesChanged -- end");
@@ -171,4 +171,4 @@ class OptionsUI {
 var options = new Options();
 var optionsUI = new OptionsUI(options);
 
-document.addEventListener("DOMContentLoaded", (e) => optionsUI.init(e), {once: true});
+document.addEventListener("DOMContentLoaded", (e) => optionsUI.init(e), { once: true });

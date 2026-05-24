@@ -9,12 +9,12 @@ export class IcIdentities {
     var icIdentities = [];
 
     var identitiesProps = await this.optionsBackend.getIdentitiesExtendedProps();
-    if(!identitiesProps) {
+    if (!identitiesProps) {
       identitiesProps = {};
     }
 
     var accounts = await this.loadAccountsWithRetry();
-    if(accounts.length == 0) {
+    if (accounts.length == 0) {
       console.debug("IcIdentities#getIdentities -- no accounts available");
       return icIdentities;
     }
@@ -26,7 +26,7 @@ export class IcIdentities {
       for (const identity of account.identities) {
         var props = identitiesProps[identity.id];
 
-        if(!props) {
+        if (!props) {
           props = {
             showInMenu: true,
             positionInMenu: nextPositionInMenu++
@@ -47,7 +47,7 @@ export class IcIdentities {
       }
     }
 
-    if(identitiesPropsChanged) {
+    if (identitiesPropsChanged) {
       await this.optionsBackend.storeIdentitiesExtendedProps(identitiesProps);
     }
 
@@ -65,13 +65,13 @@ export class IcIdentities {
     const maxAttempts = 10;
     const retryDelayMs = 100;
 
-    for(let attempt = 0; attempt < maxAttempts; attempt++) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         let accounts = await browser.accounts.list();
-        if(accounts.length > 0) {
+        if (accounts.length > 0) {
           return accounts;
         }
-      } catch(error) {
+      } catch (error) {
         // Betterbird can expose accounts late during startup. Retry instead of
         // failing the chooser on the first compose window.
       }
@@ -88,12 +88,12 @@ export class IcIdentities {
     let idlabel = mailIdentity.label;
 
     let label;
-    if(name != '') {
+    if (name != '') {
       label = `${name} <${email}>`;
     } else {
       label = email;
     }
-    if(idlabel != '') {
+    if (idlabel != '') {
       label = label + " (" + idlabel + ")";
     }
 

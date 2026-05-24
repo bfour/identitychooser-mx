@@ -33,44 +33,44 @@ class IdentityChooser {
   }
 
   async tabCreated(tab) {
-    if(tab.type != 'messageCompose') {
+    if (tab.type != 'messageCompose') {
       return;
     }
 
     let composeDetails = await browser.compose.getComposeDetails(tab.id);
 
-    if(composeDetails.type == "new") {
+    if (composeDetails.type == "new") {
       var isEnabledComposeMessage =
-          await this.icOptions.isEnabledComposeMessage();
+        await this.icOptions.isEnabledComposeMessage();
 
-      if(!isEnabledComposeMessage) {
+      if (!isEnabledComposeMessage) {
         return;
       }
     }
 
-    if(composeDetails.type == "reply") {
+    if (composeDetails.type == "reply") {
       var isEnabledReplyMessage =
-          await this.icOptions.isEnabledReplyMessage();
+        await this.icOptions.isEnabledReplyMessage();
 
-      if(!isEnabledReplyMessage) {
+      if (!isEnabledReplyMessage) {
         return;
       }
     }
 
-    if(composeDetails.type == "forward") {
+    if (composeDetails.type == "forward") {
       var isEnabledForwardMessage =
-          await this.icOptions.isEnabledForwardMessage();
+        await this.icOptions.isEnabledForwardMessage();
 
-      if(!isEnabledForwardMessage) {
+      if (!isEnabledForwardMessage) {
         return;
       }
     }
 
-    if(composeDetails.type == "draft") {
+    if (composeDetails.type == "draft") {
       var isEnabledDraftMessage =
-          await this.icOptions.isEnabledDraftMessage();
+        await this.icOptions.isEnabledDraftMessage();
 
-      if(!isEnabledDraftMessage) {
+      if (!isEnabledDraftMessage) {
         return;
       }
     }
@@ -83,14 +83,14 @@ class IdentityChooser {
       height: composeWindow.height - 200,
       width: composeWindow.width - 200,
       left: composeWindow.left + 100,
-      top: composeWindow.top +100,
+      top: composeWindow.top + 100,
       allowScriptsToClose: true,
     });
 
     let idFocusListener = async (windowId) => this.focusChanged(windowId,
-                                                                identityWindow.id);
+      identityWindow.id);
     let idRemovedListener = async (windowId) => this.windowRemoved(windowId,
-                                                                   identityWindow.id);
+      identityWindow.id);
 
     let activeIdentityWindow = {
       identityWindowId: identityWindow.id,
@@ -108,9 +108,9 @@ class IdentityChooser {
 
     let chosenIdentity = await this.popupPrompt(identityWindow.id, null);
 
-    if(chosenIdentity == null || chosenIdentity == "cancel") {
+    if (chosenIdentity == null || chosenIdentity == "cancel") {
       browser.windows.remove(composeWindow.id);
-    } else if(chosenIdentity != null) {
+    } else if (chosenIdentity != null) {
       browser.compose.setComposeDetails(tab.id, { identityId: chosenIdentity });
     }
   }
@@ -119,7 +119,7 @@ class IdentityChooser {
     let identityWindow = this.activeIdentityWindows.find(e => e.identityWindowId == identityWindowId);
     let composeWindowId = identityWindow.composeWindowId;
 
-    if(windowId == identityWindowId) {
+    if (windowId == identityWindowId) {
       // identity window closed
       browser.windows.onFocusChanged.removeListener(identityWindow.focusListener);
       browser.windows.onRemoved.removeListener(identityWindow.removedListener);
@@ -128,7 +128,7 @@ class IdentityChooser {
       this.activeIdentityWindows.splice(idx, 1);
     }
 
-    if(windowId == composeWindowId) {
+    if (windowId == composeWindowId) {
       // composer window closed
       browser.windows.remove(identityWindowId);
     }
@@ -138,7 +138,7 @@ class IdentityChooser {
     let identityWindow = this.activeIdentityWindows.find(e => e.identityWindowId == identityWindowId);
     let composeWindowId = identityWindow.composeWindowId;
 
-    if(windowId == composeWindowId) {
+    if (windowId == composeWindowId) {
       browser.windows.update(identityWindowId, { focused: true });
     }
   }
@@ -184,7 +184,7 @@ browser.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
 });
 
 async function waitForLoad() {
-  let onCreate = new Promise(function(resolve, reject) {
+  let onCreate = new Promise(function (resolve, reject) {
     function listener() {
       browser.windows.onCreated.removeListener(listener);
       resolve(true);
@@ -192,7 +192,7 @@ async function waitForLoad() {
     browser.windows.onCreated.addListener(listener);
   });
 
-  let windows = await browser.windows.getAll({windowTypes:["normal"]});
+  let windows = await browser.windows.getAll({ windowTypes: ["normal"] });
   if (windows.length > 0) {
     return false;
   } else {

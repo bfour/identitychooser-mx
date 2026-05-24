@@ -20,17 +20,17 @@ export class Options {
     console.debug("Option#setupDefaultOptions -- begin");
 
     var icOptions = await browser.storage.local.get(this.defaultOptionKeys);
-    console.debug('Option#setupDefaultOptions: locally stored options:',  icOptions);
+    console.debug('Option#setupDefaultOptions: locally stored options:', icOptions);
 
-    for(const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
-      if(!(optionName in icOptions)) {
-        browser.storage.local.set({ [optionName] : defaultValue});
+    for (const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
+      if (!(optionName in icOptions)) {
+        browser.storage.local.set({ [optionName]: defaultValue });
       }
     }
 
     console.debug("Options#setupDefaultOptions: set extended properties");
     var identitiesProps = {};
-    if('identitiesExtendedProps' in icOptions) {
+    if ('identitiesExtendedProps' in icOptions) {
       identitiesProps = icOptions['identitiesExtendedProps'];
     }
 
@@ -39,7 +39,7 @@ export class Options {
     var accounts = await browser.accounts.list();
     for (const account of accounts) {
       for (const identity of account.identities) {
-        if(!(identity.id in identitiesProps)) {
+        if (!(identity.id in identitiesProps)) {
           newIdentities[identity.id] = {
             'showInMenu': true,
             'positionInMenu': nextPositionInMenu++
@@ -48,15 +48,15 @@ export class Options {
       }
     }
 
-    if(Object.entries(newIdentities).length > 0) {
+    if (Object.entries(newIdentities).length > 0) {
       console.debug("Options#setupDefaultOptions: found new identities",
-                    newIdentities);
-      var identitiesProps = {...identitiesProps, ...newIdentities};
+        newIdentities);
+      var identitiesProps = { ...identitiesProps, ...newIdentities };
       await browser.storage.local.set(
-        { 'identitiesExtendedProps' : identitiesProps});
+        { 'identitiesExtendedProps': identitiesProps });
 
       console.debug("Options#setupDefaultOptions: stored extended properties",
-                    identitiesProps);
+        identitiesProps);
     }
 
     console.debug("Option#setupDefaultOptions -- end");
@@ -82,7 +82,7 @@ export class Options {
     var icOptions = await browser.storage.local.get(optionKey);
 
     var ret = defaultValue;
-    if(optionKey in icOptions) {
+    if (optionKey in icOptions) {
       ret = icOptions[optionKey];
     }
 
@@ -104,6 +104,6 @@ export class Options {
   }
 
   async storeIdentitiesExtendedProps(props) {
-    return browser.storage.local.set({identitiesExtendedProps: props});
+    return browser.storage.local.set({ identitiesExtendedProps: props });
   }
 }

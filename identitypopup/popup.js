@@ -2,8 +2,7 @@ import { Options } from '../modules/options.js';
 import { IcIdentities } from '../modules/identities.js';
 import { BorderColorsApi } from '../modules/bordercolorsapi.js';
 
-class IdentitiesPopup
-{
+class IdentitiesPopup {
   constructor() {
   }
 
@@ -68,7 +67,7 @@ class IdentitiesPopup
     for (let el of document.querySelectorAll("[data-l10n-id]")) {
       let id = el.getAttribute("data-l10n-id");
       let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
+      if (i18nMessage == "") {
         i18nMessage = id;
       }
       el.textContent = i18nMessage;
@@ -77,7 +76,7 @@ class IdentitiesPopup
     for (let el of document.querySelectorAll("[data-html-l10n-id]")) {
       let id = el.getAttribute("data-html-l10n-id");
       let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
+      if (i18nMessage == "") {
         i18nMessage = id;
       }
       el.insertAdjacentHTML('afterbegin', i18nMessage);
@@ -88,4 +87,4 @@ class IdentitiesPopup
 }
 
 var identitiesPopup = new IdentitiesPopup();
-document.addEventListener("DOMContentLoaded", (e) => identitiesPopup.run(e), {once: true});
+document.addEventListener("DOMContentLoaded", (e) => identitiesPopup.run(e), { once: true });
