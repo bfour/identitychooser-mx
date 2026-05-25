@@ -1,0 +1,24 @@
+[
+  {
+    "namespace": "betterbirdColors",
+    "description": "Access Betterbird compose-window account colors from the chrome UI.",
+    "functions": [
+      {
+        "name": "getComposeColors",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "composeTabId",
+            "type": "integer",
+            "description": "The compose tab id from browser.tabs.onCreated."
+          }
+        ],
+        "returns": {
+          "type": "object",
+          "description": "A map of identity/account ids to CSS color strings."
+        }
+      }
+    ]
+  }
+]

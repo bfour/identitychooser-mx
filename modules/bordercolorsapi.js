@@ -5,7 +5,13 @@ export class BorderColorsApi {
 
   }
 
-  async getAllColors() {
+  async getAllColors(composeTabId = null) {
+    let composeColors = await this.getComposeWindowColors(composeTabId);
+    if (composeColors != null) {
+      await browser.storage.local.set({ identityChooserCachedBorderColors: composeColors });
+      return composeColors;
+    }
+
     let cachedColors = await browser.storage.local.get('identityChooserCachedBorderColors');
     if ('identityChooserCachedBorderColors' in cachedColors) {
       return cachedColors['identityChooserCachedBorderColors'];
@@ -36,5 +42,25 @@ export class BorderColorsApi {
     }
 
     return borderColors;
+  }
+
+  async getComposeWindowColors(composeTabId) {
+    if (composeTabId == null || composeTabId === "") {
+      return null;
+    }
+
+    try {
+      let composeColors = await browser.betterbirdColors.getComposeColors(
+        Number(composeTabId)
+      );
+
+      if (composeColors != null && Object.keys(composeColors).length > 0) {
+        return composeColors;
+      }
+    } catch (error) {
+      // If the background page has not seen the compose probe yet, fall back.
+    }
+
+    return null;
   }
 }

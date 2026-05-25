@@ -17,6 +17,22 @@
     "messagesRead",
     "storage"
   ],
+  "experiment_apis": {
+    "betterbirdColors": {
+      "schema": "api/BetterbirdColors/schema.json",
+      "parent": {
+        "scopes": [
+          "addon_parent"
+        ],
+        "paths": [
+          [
+            "betterbirdColors"
+          ]
+        ],
+        "script": "api/BetterbirdColors/implementation.js"
+      }
+    }
+  },
   "background": {
     "page": "background.html"
   },

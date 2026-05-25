@@ -9,6 +9,8 @@ class IdentitiesPopup {
   async run(e) {
     await this.localizePage();
 
+    let composeTabId = new URL(window.location.href).searchParams.get("composeTabId");
+
     let options = new Options();
 
     let icIdentities = new IcIdentities(options);
@@ -17,7 +19,7 @@ class IdentitiesPopup {
     let identitiesList = document.getElementById("icIdentityList");
 
     let borderColorsApi = new BorderColorsApi();
-    let borderColorsPromise = borderColorsApi.getAllColors();
+    let borderColorsPromise = borderColorsApi.getAllColors(composeTabId);
 
     for (const identity of identities) {
       if (identity.showInMenu) {

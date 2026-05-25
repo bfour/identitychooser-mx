@@ -7,7 +7,7 @@ export class IcIdentities {
     console.debug("IcIdentities#getIdentities -- begin");
 
     var cachedIdentities = await this.optionsBackend.getCachedIdentities();
-    if (cachedIdentities != null) {
+    if (this.cachedIdentitiesIncludeAccountIds(cachedIdentities)) {
       console.debug("IcIdentities#getIdentities -- using cached identities", cachedIdentities);
       return cachedIdentities;
     }
@@ -46,6 +46,7 @@ export class IcIdentities {
         // after this for loop.
         icIdentities[props.positionInMenu] = {
           "id": identity.id,
+          "accountId": account.id,
           "showInMenu": props.showInMenu,
           "label": this.toIdentityLabel(identity),
           "identity": identity,
@@ -69,6 +70,14 @@ export class IcIdentities {
     console.debug("IcIdentities#getIdentities -- end", icIdentities);
 
     return icIdentities;
+  }
+
+  cachedIdentitiesIncludeAccountIds(cachedIdentities) {
+    if (!Array.isArray(cachedIdentities) || cachedIdentities.length == 0) {
+      return false;
+    }
+
+    return cachedIdentities.every(identity => "accountId" in identity);
   }
 
   async loadAccountsWithRetry() {

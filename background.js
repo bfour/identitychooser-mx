@@ -91,9 +91,10 @@ class IdentityChooser {
     }
 
     let composeWindow = await browser.windows.get(tab.windowId);
-    const popUrl = browser.runtime.getURL("identitypopup/popup.html");
+    const popUrl = new URL(browser.runtime.getURL("identitypopup/popup.html"));
+    popUrl.searchParams.set("composeTabId", tab.id);
     let identityWindow = await browser.windows.create({
-      url: popUrl,
+      url: popUrl.toString(),
       type: "popup",
       height: composeWindow.height - 200,
       width: composeWindow.width - 200,
